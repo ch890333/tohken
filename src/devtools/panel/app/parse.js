@@ -9,17 +9,17 @@
     if (!this.data['resource']['filling']) {
       this.data['resource']['filling'] = true;
     }
-    this.data['resource']['charcoal'] = resource['charcoal'];
-    this.data['resource']['steel'] = resource['steel'];
-    this.data['resource']['coolant'] = resource['coolant'];
-    this.data['resource']['file'] = resource['file'];
-    this.data['resource']['bill'] = resource['bill'];
+    this.data['resource']['charcoal']     = resource['charcoal'];
+    this.data['resource']['steel']        = resource['steel'];
+    this.data['resource']['coolant']      = resource['coolant'];
+    this.data['resource']['file']         = resource['file'];
+    this.data['resource']['bill']         = resource['bill'];
     this.data['resource']['max_resource'] = resource['max_resource'];
-    this.data['resource']['last_update'] = Date.now();
-    this.data['resource']['vcharcoal'] = 0;
-    this.data['resource']['vsteel'] = 0;
-    this.data['resource']['vcoolant'] = 0;
-    this.data['resource']['vfile'] = 0;
+    this.data['resource']['last_update']  = Date.now();
+    this.data['resource']['vcharcoal']    = 0;
+    this.data['resource']['vsteel']       = 0;
+    this.data['resource']['vcoolant']     = 0;
+    this.data['resource']['vfile']        = 0;
     return 'done';
   };
   exports.tohken.parse.sword = function(sword) {
@@ -33,17 +33,15 @@
         var pre;
         pre = _this.data['sword']['data'][k] ? _.clone(_this.data['sword']['data'][k]) : _.clone(exports.tohken.data['sword']['template']);
         _.forEach(pre, function(vi, ki) {
-          if (_.has(v, ki)) {
-            pre[ki] = v[ki];
-          }
-          if (ki === 'vfatigue') {
-            pre[ki] = 0;
-          }
+          if (_.has(v, ki)) { pre[ki] = v[ki]; }
+          if (ki === 'vfatigue') { pre[ki] = 0; }
           if (ki === 'next_exp') {
-            if(exports.tohken.define['tohkens'][pre['sword_id']]['ktan']) pre[ki] = exports.tohken.define.upexpkt[parseInt(pre['level'], 10)] - parseInt(pre['exp'], 10);
-      else if(exports.tohken.define['tohkens'][pre['sword_id']]['kwaki']) pre[ki] = exports.tohken.define.upexpkw[parseInt(pre['level'], 10)] - parseInt(pre['exp'], 10);
+            if (exports.tohken.define['tohkens'][pre['sword_id']]['ktan']) pre[ki] = exports.tohken.define.upexpkt[parseInt(pre['level'], 10)] - parseInt(pre['exp'], 10);
+            else if (exports.tohken.define['tohkens'][pre['sword_id']]['kwaki']) pre[ki] = exports.tohken.define.upexpkw[parseInt(pre['level'], 10)] - parseInt(pre['exp'], 10);
+            else if (exports.tohken.define['tohkens'][pre['sword_id']]['kuchi3']) pre[ki] = exports.tohken.define.upexpku3[parseInt(pre['level'], 10)] - parseInt(pre['exp'], 10);
+            else if (exports.tohken.define['tohkens'][pre['sword_id']]['kuchi4']) pre[ki] = exports.tohken.define.upexpku4[parseInt(pre['level'], 10)] - parseInt(pre['exp'], 10);
             else pre[ki] = exports.tohken.define.upexp[parseInt(pre['level'], 10)] - parseInt(pre['exp'], 10);
-            
+
             if (parseInt(v['level'], 10) === 99) {
               return pre[ki] = 0;
             }
@@ -53,24 +51,20 @@
         return 'done';
       };
     })(this));
-    this.data['sword']['data'] = branch;
+    this.data['sword']['data']        = branch;
     this.data['sword']['last_update'] = Date.now();
     exports.tohken.parse.view.call(this, 'party');
     return 'done';
   };
   exports.tohken.parse.party = function(party) {
-    if (!this.data['party']['filling']) {
-      this.data['party']['filling'] = true;
-    }
+    if (!this.data['party']['filling']) { this.data['party']['filling'] = true; }
     this.data['party']['data'] = party;
     this.data['party']['last_update'] = Date.now();
     exports.tohken.parse.view.call(this, 'party');
     return 'done';
   };
   exports.tohken.parse.equip = function(equip) {
-    if (!this.data['equip']['filling']) {
-      this.data['equip']['filling'] = true;
-    }
+    if (!this.data['equip']['filling']) { this.data['equip']['filling'] = true; }
     this.data['equip']['data'] = equip;
     this.data['equip']['last_update'] = Date.now();
     exports.tohken.parse.view.call(this, 'party');
@@ -78,26 +72,20 @@
     return 'done';
   };
   exports.tohken.parse.forge = function(forge) {
-    if (!this.data['forge']['filling']) {
-      this.data['forge']['filling'] = true;
-    }
+    if (!this.data['forge']['filling']) { this.data['forge']['filling'] = true; }
     this.data['forge']['data'] = forge;
     _.forEach(forge, (function(_this) {
       return function(v, k) {
         var has, id, time;
         time = Date.parse(v['finished_at'] + " GMT+0900");
-        id = v['slot_no'] + "-" + time;
-        has = _.has(_this.data['logs']['forge'], id);
-        if (!has) {
-          _this.data['logs']['forge'][id] = {};
-        }
-        _this.data['logs']['forge'][id]['slot_no'] = v['slot_no'];
+        id   = v['slot_no'] + "-" + time;
+        has  = _.has(_this.data['logs']['forge'], id);
+        if (!has) { _this.data['logs']['forge'][id] = {}; }
+        _this.data['logs']['forge'][id]['slot_no']   = v['slot_no'];
         _this.data['logs']['forge'][id]['finish_at'] = time;
-        _this.data['logs']['forge'][id]['sword_id'] = v['sword_id'];
-        _this.data['logs']['forge'][id]['resource'] = _.has(_this.data['logs']['forge'][id], 'charcoal');
-        if (!_this.data['logs']['forge'][id]['upload']) {
-          exports.tohken.parse.upload.call(_this, id, _this.data['logs']['forge'][id]);
-        }
+        _this.data['logs']['forge'][id]['sword_id']  = v['sword_id'];
+        _this.data['logs']['forge'][id]['resource']  = _.has(_this.data['logs']['forge'][id], 'charcoal');
+        if (!_this.data['logs']['forge'][id]['upload']) { exports.tohken.parse.upload.call(_this, id, _this.data['logs']['forge'][id]); }
         if (_this.config['dataCache'] === 1) {
           exports.tohken.store.set("TRH_DataCache", JSON.stringify(_this.data));
           exports.tohken.store.set("TRH_Logs", JSON.stringify(_this.data['logs']));
@@ -110,10 +98,8 @@
     return 'done';
   };
   exports.tohken.parse.repair = function(repair) {
-    if (!this.data['repair']['filling']) {
-      this.data['repair']['filling'] = true;
-    }
-    this.data['repair']['data'] = repair;
+    if (!this.data['repair']['filling']) { this.data['repair']['filling'] = true; }
+    this.data['repair']['data']        = repair;
     this.data['repair']['last_update'] = Date.now();
     return 'done';
   };
@@ -123,47 +109,45 @@
     leader = null;
     _.forEach(battle.player.party, function(v, k) {
       var sword;
-      sword = {};
-      sword['sword_id'] = v['sword_id'];
-      sword['hp'] = v['hp'];
-      sword['hp_max'] = v['hp_max'];
+      sword                     = {};
+      sword['sword_id']         = v['sword_id'];
+      sword['hp']               = v['hp'];
+      sword['hp_max']           = v['hp_max'];
       sword['equip_serial_id1'] = v['equip_serial_id1'];
-      sword['soldier1'] = v['soldier1'];
+      sword['soldier1']         = v['soldier1'];
       sword['equip_serial_id2'] = v['equip_serial_id2'];
-      sword['soldier2'] = v['soldier2'];
+      sword['soldier2']         = v['soldier2'];
       sword['equip_serial_id3'] = v['equip_serial_id3'];
-      sword['soldier3'] = v['soldier3'];
-      party[v['serial_id']] = sword;
-      if (leader === null) {
-        leader = v['serial_id'];
-      }
+      sword['soldier3']         = v['soldier3'];
+      party[v['serial_id']]     = sword;
+      if (leader === null) { leader = v['serial_id']; }
       return 'done';
     });
     result = {};
     result['battle_episode'] = this.status['battle_episode'];
-    result['battle_field'] = this.status['battle_field'];
-    result['battle_pos'] = this.status['battle_pos'];
-    result['battle_party'] = this.status['battle_id'];
-    result['get_sword_id'] = battle.result['get_sword_id'];
-    result['mvp'] = battle.result['mvp'];
-    result['rank'] = battle.result['rank'];
-    result['life'] = battle.result.player['life'];
-    result['life_max'] = battle.result.player['life_max'];
-    result['soldier'] = battle.result.player['soldier'];
-    result['soldier_max'] = battle.result.player['soldier_max'];
-    result['get_exp'] = battle.result.player['get_exp'];
-    result['time'] = Date.parse(battle['now'] + " GMT+0900");
-    result['id'] = result['battle_party'] + "-" + result['battle_episode'] + "-" + result['battle_field'] + "-" + result['battle_pos'] + "-" + result['time'];
-    player = {};
-    player['level'] = battle.result.player['level'];
-    player['exp'] = battle.result.player['exp'];
-    result['party_no'] = battle.result.player.party['party_no'];
+    result['battle_field']   = this.status['battle_field'];
+    result['battle_pos']     = this.status['battle_pos'];
+    result['battle_party']   = this.status['battle_id'];
+    result['get_sword_id']   = battle.result['get_sword_id'];
+    result['mvp']            = battle.result['mvp'];
+    result['rank']           = battle.result['rank'];
+    result['life']           = battle.result.player['life'];
+    result['life_max']       = battle.result.player['life_max'];
+    result['soldier']        = battle.result.player['soldier'];
+    result['soldier_max']    = battle.result.player['soldier_max'];
+    result['get_exp']        = battle.result.player['get_exp'];
+    result['time']           = Date.parse(battle['now'] + " GMT+0900");
+    result['id']             = result['battle_party'] + "-" + result['battle_episode'] + "-" + result['battle_field'] + "-" + result['battle_pos'] + "-" + result['time'];
+    player                   = {};
+    player['level']          = battle.result.player['level'];
+    player['exp']            = battle.result.player['exp'];
+    result['party_no']       = battle.result.player.party['party_no'];
     _.forEach(battle.result.player.party.slot, function(v, k) {
-      party[v['serial_id']]['hp'] = v['hp'];
-      party[v['serial_id']]['status'] = v['status'];
-      party[v['serial_id']]['exp'] = v['exp'];
-      party[v['serial_id']]['level'] = v['level'];
-      party[v['serial_id']]['mvp'] = result['mvp'] === v['serial_id'] ? true : false;
+      party[v['serial_id']]['hp']      = v['hp'];
+      party[v['serial_id']]['status']  = v['status'];
+      party[v['serial_id']]['exp']     = v['exp'];
+      party[v['serial_id']]['level']   = v['level'];
+      party[v['serial_id']]['mvp']     = result['mvp'] === v['serial_id'] ? true : false;
       party[v['serial_id']]['get_exp'] = v['get_exp'];
       return 'done';
     });
@@ -172,40 +156,30 @@
       party[k]['vfatigue'] = -3;
       return 'done';
     });
-    if (parseInt(result['mvp'], 10) !== 0) {
-      party[result['mvp']]['vfatigue'] += 10;
-    }
+    if (parseInt(result['mvp'], 10) !== 0) { party[result['mvp']]['vfatigue'] += 10; }
     switch (parseInt(result['rank'], 10)) {
       case 2:
         _.forEach(party, function(v, k) {
           party[k]['vfatigue'] += 4;
-          if (leader === k) {
-            return party[k]['vfatigue'] += 3;
-          }
+          if (leader === k) { return party[k]['vfatigue'] += 3; }
         });
         break;
       case 3:
         _.forEach(party, function(v, k) {
           party[k]['vfatigue'] += 3;
-          if (leader === k) {
-            return party[k]['vfatigue'] += 3;
-          }
+          if (leader === k) { return party[k]['vfatigue'] += 3; }
         });
         break;
       case 4:
         _.forEach(party, function(v, k) {
           party[k]['vfatigue'] += 2;
-          if (leader === k) {
-            return party[k]['vfatigue'] += 3;
-          }
+          if (leader === k) { return party[k]['vfatigue'] += 3; }
         });
         break;
       case 5:
         _.forEach(party, function(v, k) {
           party[k]['vfatigue'] += 1;
-          if (leader === k) {
-            return party[k]['vfatigue'] += 3;
-          }
+          if (leader === k) { return party[k]['vfatigue'] += 3; }
         });
     }
     notify = [];
@@ -254,16 +228,17 @@
         value: result['get_sword_id']
       });
     }
-    asia = [3, 5, 7, 9, 13, 15, 17, 25, 31, 33, 35, 37, 43, 51, 53, 55, 57, 59, 63, 65, 67, 69, 71, 79, 107, 112, 120, 124, 130, 132, 134, 136, 138, 140, 142,];
-    europe = [3, 5, 13, 15, 17, 31, 33, 35, 37, 43, 51, 53, 57, 63, 67, 69, 71, 120, 124, 136, 140, 142,];
+    asia = [3, 5, 7, 9, 13, 15, 17, 25, 31, 33, 35, 37, 43, 51, 53, 55, 57, 59, 63, 65, 67, 69, 71, 79, 107, 112, 120, 124, 130, 132, 134, 136, 138, 140, 142, ];
+    europe = [3, 5, 13, 15, 17, 31, 33, 35, 37, 43, 51, 53, 57, 63, 67, 69, 71, 120, 124, 136, 140, 142, ];
+    /*      歐亞刀 怎麼可以放在執行檔裡!! 要放在Define裡阿    */
+
     _.forEach(notify, (function(_this) {
       return function(n) {
         var has;
         switch (n['type']) {
           case 'equip':
-            if (_this.config['notify_broken'] < 5) {
-              return;
-            }
+            if (_this.config['notify_broken'] < 5) { return; }
+
             _this.sendMessage({
               type: 'notify',
               message: {
@@ -276,9 +251,7 @@
           case 'broken':
             switch (n['value']) {
               case 0:
-                if (_this.config['notify_broken'] < 4) {
-                  return;
-                }
+                if (_this.config['notify_broken'] < 4) { return; }
                 _this.sendMessage({
                   type: 'notify',
                   message: {
@@ -289,68 +262,52 @@
                 });
                 break;
               case 1:
-                if (_this.config['notify_broken'] < 3) {
-                  return;
-                }
+                if (_this.config['notify_broken'] < 3) { return; }
                 _this.sendMessage({
                   type: 'notify',
                   message: {
                     title: exports.tohken.define.tohkens[n['sword']]['name'] + "已經輕傷！",
-                     message: "請注意受傷狀況避免歲刀情況發生！",
-                     context: "提醒方式可在設定分頁進行設定"
+                    message: "請注意受傷狀況避免歲刀情況發生！",
+                    context: "提醒方式可在設定分頁進行設定"
                   }
                 });
                 break;
               case 2:
-                if (_this.config['notify_broken'] < 2) {
-                  return;
-                }
+                if (_this.config['notify_broken'] < 2) { return; }
                 _this.sendMessage({
                   type: 'notify',
                   message: {
                     title: exports.tohken.define.tohkens[n['sword']]['name'] + "已經中傷！",
-                     message: "請考慮回本丸重新修整，避免歲刀情況發生！",
-                     context: "提醒方式可在設定分頁進行設定"
+                    message: "請考慮回本丸重新修整，避免歲刀情況發生！",
+                    context: "提醒方式可在設定分頁進行設定"
                   }
                 });
                 break;
               case 3:
-                if (_this.config['notify_broken'] < 1) {
-                  return;
-                }
+                if (_this.config['notify_broken'] < 1) { return; }
                 _this.sendMessage({
                   type: 'notify',
                   message: {
                     title: exports.tohken.define.tohkens[n['sword']]['name'] + "已經重傷！",
-                     message: "請放棄前進，回本丸重新修整，避免歲刀情況發生！",
-                     context: "提醒方式可在設定分頁進行設定"
+                    message: "請放棄前進，回本丸重新修整，避免歲刀情況發生！",
+                    context: "提醒方式可在設定分頁進行設定"
                   }
                 });
             }
             break;
           case 'get':
-            if (_this.config['notify_getnew'] === 0) {
-              return;
-            }
+            if (_this.config['notify_getnew'] === 0) { return; }
             if (_this.config['notify_getnew'] === 1) {
               has = _.findIndex(asia, function(i) {
-                if (i === parseInt(n['sword'])) {
-                  return true;
-                }
+                if (i === parseInt(n['sword'])) { return true; }
               });
-              if (has === -1) {
-                return;
-              }
+              if (has === -1) { return; }
             }
             if (_this.config['notify_getnew'] === 2) {
               has = _.findIndex(europe, function(i) {
-                if (i === parseInt(n['sword'])) {
-                  return true;
-                }
+                if (i === parseInt(n['sword'])) { return true; }
               });
-              if (has === -1) {
-                return;
-              }
+              if (has === -1) { return; }
             }
             _this.sendMessage({
               type: 'notify',
@@ -383,13 +340,13 @@
         sword['equip_serial_id2'] = party[v['serial_id']]['equip_serial_id2'];
         sword['equip_serial_id3'] = party[v['serial_id']]['equip_serial_id3'];
 
-        if(exports.tohken.define['tohkens'][sword['sword_id']]['ktan']) sword['next_exp'] = exports.tohken.define.upexpkt[parseInt(sword['level'], 10)] - parseInt(sword['exp'], 10);
-    else if(exports.tohken.define['tohkens'][sword['sword_id']]['kwaki']) sword['next_exp'] = exports.tohken.define.upexpkw[parseInt(sword['level'], 10)] - parseInt(sword['exp'], 10);
+        if (exports.tohken.define['tohkens'][sword['sword_id']]['ktan']) sword['next_exp'] = exports.tohken.define.upexpkt[parseInt(sword['level'], 10)] - parseInt(sword['exp'], 10);
+        else if (exports.tohken.define['tohkens'][sword['sword_id']]['kwaki']) sword['next_exp'] = exports.tohken.define.upexpkw[parseInt(sword['level'], 10)] - parseInt(sword['exp'], 10);
+        else if (exports.tohken.define['tohkens'][sword['sword_id']]['kuchi3']) sword['next_exp'] = exports.tohken.define.upexpku3[parseInt(sword['level'], 10)] - parseInt(sword['exp'], 10);
+        else if (exports.tohken.define['tohkens'][sword['sword_id']]['kuchi4']) sword['next_exp'] = exports.tohken.define.upexpku4[parseInt(sword['level'], 10)] - parseInt(sword['exp'], 10);
         else sword['next_exp'] = exports.tohken.define.upexp[parseInt(sword['level'], 10)] - parseInt(sword['exp'], 10);
-        
-        if (parseInt(sword['level'], 10) === 99) {
-          sword['next_exp'] = 0;
-        }
+
+        if (parseInt(sword['level'], 10) === 99) { sword['next_exp'] = 0; }
         fatigue = parseInt(sword['fatigue'], 10) + parseInt(party[v['serial_id']]['vfatigue'], 10);
         sword['fatigue'] = fatigue > 100 || fatigue < 0 ? 100 : fatigue;
         if (fatigue > 100) {
@@ -460,28 +417,17 @@
         target['set'] = true;
         break;
       case 'equip':
-        if (this.data['equip']['filling'] === false) {
-          return;
-        }
-        equ = _.groupBy(this.data['equip']['data'], function(n) {
-          return n['equip_id'];
-        });
-        equ = _.mapValues(equ, function(n) {
-          return n.length;
-        });
+        if (this.data['equip']['filling'] === false) { return; }
+        equ = _.groupBy(this.data['equip']['data'], function(n) { return n['equip_id']; });
+        equ = _.mapValues(equ, function(n) { return n.length; });
         this.view['equips']['data'] = equ;
         this.view['equips']['set'] = true;
         break;
       case 'party':
-        if (this.data['equip']['filling'] === false) {
-          return;
-        }
-        if (this.data['sword']['filling'] === false) {
-          return;
-        }
-        if (this.data['party']['filling'] === false) {
-          return;
-        }
+        if (this.data['equip']['filling'] === false) { return; }
+        if (this.data['sword']['filling'] === false) { return; }
+        if (this.data['party']['filling'] === false) { return; }
+
         source = this.data['party'];
         target = _.clone(this.data['party']['data']);
         _.forEach(target, (function(_this) {
@@ -490,7 +436,7 @@
             lvs = 0;
             eqs = 0;
             ths = 0;
-      sct = 0;
+            sct = 0;
             slot = _.clone(v['slot']);
             _.forEach(v['slot'], function(vi, ki) {
               var soldiers;
@@ -542,20 +488,16 @@
                 slot[ki]['max_equip'] = exports.tohken.define['tohkens'][slot[ki]['sword_id']] ? exports.tohken.define['tohkens'][slot[ki]['sword_id']]['equip'] : 2;
                 slot[ki]['soldiers'] = soldiers;
                 lvs += parseInt(slot[ki]['level'], 10);
-        sct += parseInt(slot[ki]['scout'], 10);
+                sct += parseInt(slot[ki]['scout'], 10);
                 eqs += soldiers;
-                if (_this.config["cad"]) {
-                  return slot[ki]['fatigue'] = parseInt(slot[ki]['fatigue'], 10) + parseInt(slot[ki]['vfatigue'], 10);
-                } else {
-                  return slot[ki]['fatigue'] = slot[ki]['fatigue'];
-                }
+                if (_this.config["cad"]) { return slot[ki]['fatigue'] = parseInt(slot[ki]['fatigue'], 10) + parseInt(slot[ki]['vfatigue'], 10); } else { return slot[ki]['fatigue'] = slot[ki]['fatigue']; }
               }
             });
             target[k]['slot'] = slot;
             target[k]['amount_lv'] = lvs;
             target[k]['avearge_lv'] = lvs ? (lvs / ths).toFixed(2) : 0;
             target[k]['soldiers'] = eqs;
-      target[k]['amount_sc'] = sct;
+            target[k]['amount_sc'] = sct;
             return 'done';
           };
         })(this));
@@ -565,9 +507,7 @@
     return 'done';
   };
   exports.tohken.parse.conquest = function(party) {
-    if (this.config['notify_conquest'] === 0) {
-      return;
-    }
+    if (this.config['notify_conquest'] === 0) { return; }
     _.forEach(party, (function(_this) {
       return function(v, k) {
         var cmsg, context, earlier, f, fd, finish, message, title;
@@ -577,26 +517,26 @@
           fd = new Date();
           fd.setTime(finish);
           earlier = 0;
-          title = "部隊" + v['party_no'] + " 遠征結束";
+          title   = "部隊" + v['party_no'] + " 遠征結束";
           message = "結束時間： " + (fd.getHours()) + ":" + (fd.getMinutes()) + ":" + (fd.getSeconds());
           context = "請回本丸遠征成果。";
-          cmsg = "將在結束時提醒";
+          cmsg    = "將在結束時提醒";
           switch (_this.config['notify_conquest']) {
             case 0:
               return;
             case 1:
-              title = "部隊" + v['party_no'] + " 遠征還有五分鐘結束";
-              cmsg = "將在結束前五分鐘提醒";
+              title   = "部隊" + v['party_no'] + " 遠征還有五分鐘結束";
+              cmsg    = "將在結束前五分鐘提醒";
               earlier = 5 * 60 * 1000;
               break;
             case 2:
-              title = "部隊" + v['party_no'] + " 遠征還有二分鐘結束";
-              cmsg = "將在結束前二分鐘提醒";
+              title   = "部隊" + v['party_no'] + " 遠征還有二分鐘結束";
+              cmsg    = "將在結束前二分鐘提醒";
               earlier = 2 * 60 * 1000;
               break;
             case 3:
-              title = "部隊" + v['party_no'] + " 遠征還有半分鐘結束";
-              cmsg = "將在結束前半分鐘提醒";
+              title   = "部隊" + v['party_no'] + " 遠征還有半分鐘結束";
+              cmsg    = "將在結束前半分鐘提醒";
               earlier = 0.5 * 60 * 1000;
           }
           _this.sendMessage({
@@ -637,23 +577,23 @@
           title = exports.tohken.define.tohkens[_this.data['sword']['data'][v['sword_serial_id']]['sword_id']]['name'] + " 's just been repaired!";
           message = "結束時間 " + (_this.t2t(fd));
           context = "可以取刀了!!";
-          cmsg = "將在結束時提醒";
+          cmsg    = "將在結束時提醒";
           switch (_this.config['notify_conquest']) {
             case 0:
               return;
             case 1:
-              title = v['party_name'] + "還有五分鐘完成手入";
-              cmsg = "提醒方式可在設定分頁進行設定";
+              title   = v['party_name'] + "還有五分鐘完成手入";
+              cmsg    = "提醒方式可在設定分頁進行設定";
               earlier = 5 * 60 * 1000;
               break;
             case 2:
-              title = v['party_name'] + "還有二分鐘完成手入";
-              cmsg = "提醒方式可在設定分頁進行設定";
+              title   = v['party_name'] + "還有二分鐘完成手入";
+              cmsg    = "提醒方式可在設定分頁進行設定";
               earlier = 2 * 60 * 1000;
               break;
             case 3:
-              title = v['party_name'] + "還有二分鐘完成手入";
-              cmsg = "提醒方式可在設定分頁進行設定";
+              title   = v['party_name'] + "還有二分鐘完成手入";
+              cmsg    = "提醒方式可在設定分頁進行設定";
               earlier = 0.5 * 60 * 1000;
           }
           _this.sendMessage({
@@ -666,7 +606,7 @@
               'context': context
             },
             'startmsg': {
-              'title': exports.tohken.define.tohkens[_this.data['sword']['data'][v['sword_serial_id']]['sword_id']]['name'] + "手入開始",
+              'title': exports.tohken.define.tohkens[_this.data['sword']['data'][v['sword_serial_id']]['sword_id']]['name'] + "?‹å…¥?‹å?",
               'message': message,
               'context': cmsg
             }
@@ -714,18 +654,14 @@
       "server": this.data['player']['world'] !== null ? this.data['player']['world'] : 'empty'
     }), (function(_this) {
       return function(data, status) {
-        if (status === 'success') {
-          return console.log('upload');
-        }
+        if (status === 'success') { return console.log('upload'); }
       };
     })(this));
     return 'done';
   };
   return exports.tohken.parse.fill = function(target, source) {
     _.forEach(target, function(vi, ki) {
-      if (_.has(source, ki)) {
-        target[ki] = source[ki];
-      }
+      if (_.has(source, ki)) { target[ki] = source[ki]; }
       return 'done';
     });
     return 'done';
