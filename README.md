@@ -1,6 +1,7 @@
 # Tohken Ranbu Helper
 ## 介绍
-Chrome插件一枚，跟著阿官更新版本。目前已支援小豆長光以前的更新。
+Chrome插件一枚，跟著阿官更新版本。
+目前已支援大般若長光以前的刀劍資料更新。
 
 ## 功能
 * 疲劳度查看以及疲劳演算
@@ -26,20 +27,20 @@ src─┐
     │  │  devtools.js
     │  │
     │  └─panel
-    │      │  index.jade              # 面板宿主
+    │      │  index.html              # 面板宿主
     │      │
     │      ├─app
-    │      │      app.coffee          # Vue构造，主体部分
-    │      │      config.coffee       # 默认的设置
-    │      │      data.coffee         # 默认的数据
-    │      │      define.coffee       # 定义静态数据
-    │      │      event.coffee        # 休息时的疲劳计算
-    │      │      inject.coffee       # 页面注入，负责推送通知
-    │      │      log.coffee          # 暂无作用
-    │      │      parse.coffee        # 解析和填充数据
-    │      │      router.coffee       # 数据包路由
-    │      │      store.coffee        # 储存部分的封装
-    │      │      view.coffee         # 默认的视图数据
+    │      │      app.js              # Vue构造，主体部分
+    │      │      config.js           # 默认的设置
+    │      │      data.js             # 默认的数据
+    │      │      define.js           # 定义静态数据
+    │      │      event.js            # 休息时的疲劳计算
+    │      │      inject.js           # 页面注入，负责推送通知
+    │      │      log.js              # 暂无作用
+    │      │      parse.js            # 解析和填充数据
+    │      │      router.js           # 数据包路由
+    │      │      store.js            # 储存部分的封装
+    │      │      view.js             # 默认的视图数据
     │      │
     │      ├─assets
     │      │      base.less
@@ -48,27 +49,23 @@ src─┐
     │      │      party-item.less
     │      │      # 样式
     │      └─template
-    │              about.jade         # 关于
-    │              config.jade        # 设置
-    │              forge_rep.jade     # 本丸
-    │              logs.jade          # 记录
-    │              party_item.jade    # 队伍
+    │              about.html         # 关于
+    │              config.html        # 设置
+    │              forge_rep.html     # 本丸
+    │              logs.html          # 记录
+    │              party_item.html    # 队伍
     │              # 面板
-    ├─popup
-    │      container.html
-    │      popup.coffee
-    │      popup.html
-    │      resize.coffee
-    │      # 暂时弃用的部分
     └─thirdparty
+            aes.js
             FileSaver.js
             jquery.js
             livereload.js
             lodash.js
+            pad-nopadding-min.js
             vue.js
             # 第三方库
 ```
-## 运行机理
+## 运行机理(本區待更新)
 ```coffee
   # line 35~:  /src/devtools/panel/app/app.coffee
   ready: ->
