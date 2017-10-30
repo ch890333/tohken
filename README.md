@@ -1,7 +1,8 @@
 # Tohken Ranbu Helper
 ## 介绍
-Chrome插件一枚，跟著阿官更新版本。
-目前已支援大般若長光以前的刀劍資料更新。
+* Chrome插件一枚，跟著阿官更新版本。
+* 目前已支援大般若長光以前的刀劍資料更新。
+* 0.3.0.11 精簡化，刪除運行非必要template html file
 
 ## 功能
 * 疲劳度查看以及疲劳演算
@@ -43,18 +44,11 @@ src─┐
     │      │      view.js             # 默认的视图数据
     │      │
     │      ├─assets
-    │      │      base.less
-    │      │      index.less
-    │      │      main.less
-    │      │      party-item.less
-    │      │      # 样式
-    │      └─template
-    │              about.html         # 关于
-    │              config.html        # 设置
-    │              forge_rep.html     # 本丸
-    │              logs.html          # 记录
-    │              party_item.html    # 队伍
-    │              # 面板
+    │             base.less
+    │             index.less
+    │             main.less
+    │             party-item.less
+    │             # 样式
     └─thirdparty
             aes.js
             FileSaver.js
