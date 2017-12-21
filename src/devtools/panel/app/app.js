@@ -29,7 +29,7 @@
       chrome.devtools.network.onRequestFinished.addListener((function(_this) {
         return function(request) {
           var tohken;
-          tohken = request.request.url.match(/http:\/\/(.*?)\.touken-ranbu\.jp\/(.*)/);
+          tohken = request.request.url.match(/https?:\/\/(.*?)\.touken-ranbu\.jp\/(.*)/);
           if (tohken !== null) {
             if (tohken[1] === "static") {
               return;
@@ -76,7 +76,7 @@
       },
       ls2n: function(sword_id) {
         if (sword_id === null || parseInt(sword_id, 10) === 0) {
-          return 'None';
+          return '[空]';
         }
         return exports.tohken.define.tohkens[sword_id] ? exports.tohken.define.tohkens[sword_id]['name'] : sword_id;
       },
@@ -85,7 +85,7 @@
           return '???';
         }
         if (sword_id === null || parseInt(sword_id, 10) === 0) {
-          return 'None';
+          return '[空]';
         }
         return exports.tohken.define.tohkens[sword_id] ? exports.tohken.define.tohkens[sword_id]['name'] : sword_id;
       },
@@ -194,7 +194,7 @@
       },
       s2n: function(sword_id) {
         if (sword_id === null || parseInt(sword_id, 10) === 0) {
-          return 'None';
+          return '[空]';
         }
         return exports.tohken.define.tohkens[sword_id] ? exports.tohken.define.tohkens[sword_id]['name'] : sword_id;
       },
@@ -231,7 +231,7 @@
           type: "text/plain;charset=utf-8"
         });
         saveAs(blob, "TRHData" + (Date.now()) + ".json");
-          forge = "\"Time\",\"Kết quả\",\"Smithing duration\",\"Charcoal\",\"Steel\",\"Coolant\",\"Whetstone\"";
+        forge = "\"時間\",\"結果\",\"耗時\",\"木炭\",\"玉鋼\",\"冷卻材\",\"砥石\"";
         _.forEach(this.data['logs']['forge'], (function(_this) {
           return function(v, k) {
             if (v['resource']) {
@@ -245,7 +245,7 @@
           type: "text/plain;charset=utf-8"
         });
         saveAs(blob, "TRHForge" + (Date.now()) + ".csv");
-        battle = "\"Time\",\"Team\",\"Rank\",\"Drop\",\"Map\",\"Node\"";
+        battle = "\"時間\",\"隊伍\",\"評分\",\"獲得\",\"地圖\",\"位置\"";
         _.forEach(this.data['logs']['battle'], (function(_this) {
           return function(v, k) {
             return battle += "\n\"'" + (_this.t2t(v['time'])) + "\",\"'" + v['party_no'] + "\",\"'" + (_this.r2r(v['rank'])) + "\",\"'" + (_this.s2n(v['get_sword_id'])) + "\",\"'" + v['battle_episode'] + "-" + v['battle_field'] + "\",\"'" + v['battle_pos'] + "\"";

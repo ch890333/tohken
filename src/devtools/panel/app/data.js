@@ -7,6 +7,7 @@
       "filling": false,
       "name": null,
       "level": null,
+      "symbol": null,
       "exp": null,
       "max_sword": null,
       "now_sword": null,

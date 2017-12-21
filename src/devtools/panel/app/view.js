@@ -6,7 +6,7 @@
     player: {
       "set": false,
       "name": null,
-      "level": null
+      "level": null,
     },
     resource: {
       "set": false,
