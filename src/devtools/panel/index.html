@@ -10,7 +10,9 @@
   <ul class="top">
     <li>審神者<b v-if="view.player.name!=null">{{view.player.name}}</b></li>
     <li v-if="view.player.level!=null">Lv.<b>{{view.player.level}}</b></li>
-    <li v-if="!view.resource.set">暫未獲取資料，請進入本丸或鍛刀分頁</li>
+    <li v-if="!view.resource.set">暫未獲取資料，請進入本丸分頁</li>
+    <li> 目前版本： <b>V0.3.0.1111</b></li>
+    <!-- 簡化套件header
     <li v-if="view.resource.charcoal!=null">木炭<b>{{Math.floor(view.resource.charcoal)}}</b></li>
     <li v-if="view.resource.steel!=null">玉鋼<b>{{Math.floor(view.resource.steel)}}</b></li>
     <li v-if="view.resource.coolant!=null">冷却材<b>{{Math.floor(view.resource.coolant)}}</b></li>
@@ -18,28 +20,34 @@
     <li v-if="view.resource.bill!=null">依頼札<b>{{Math.floor(view.resource.bill)}}</b></li>
     <li v-if="view.resource.bonemeal!=null">手伝い札<b>{{Math.floor(view.resource.bonemeal)}}</b></li>
     <li v-if="view.resource.money!=null">小判<b>{{Math.floor(view.resource.money)}}</b></li>
-    <li class="ad"><a href="http://weibo.com/moelynn" target="_blank">这货太能跳票了都跳了一年了还不更新…</a></li>
+    -->
   </ul>
   <ul class="nav">
     <li v-class="active: tab == 2" v-on="click: tab = 2">隊伍</li>
     <li v-class="active: tab == 3" v-on="click: tab = 3">本丸</li>
+    <!-- 工程中
+    <li v-class="active: tab == 3" v-on="click: tab = 4">..</li>
+  -->
     <li v-class="active: tab == 5" v-on="click: tab = 5">紀錄</li>
     <li v-class="active: tab == -1" v-on="click: tab = -1">設定</li>
     <li v-class="active: tab == -2" v-on="click: tab = -2">關於套件</li>
   </ul>
   <div class="container">
-    <div v-if="!gaming" class="outgame">尚未取得資料，如已經開啟了【儲存遊戲資料】功能，顯示的可能是之前的暫存紀錄</div>
-    <!-- 队伍列表-->
+    <div v-if="!gaming" class="outgame">暫未取得資料，如已開啟【儲存遊戲資料】功能，顯示的應為先前的暫存紀錄</div>
+    <!-- 分頁 #2：队伍列表 -->
     <div v-if="!view['party']['set']" v-show="tab==2">暫未取得隊伍資料，請進入結成頁面</div>
-    <!-- 队伍列表-->
     <div v-if="view['party']['set']" v-show="tab==2">
       <div v-if="view['party']['set']" class="party">
         <div v-repeat="view['party']['data']" class="party-item">
           <!-- 队伍和状态标注-->
-          <div class="name">{{party_name}}<span v-show="in_battle(party_no)" class="status">[战斗中]</span><span v-show="status==2" class="status">[遠征中]</span><span v-show="status==2" class="status">[{{finished_at | conquest_time}}]</span></div>
+          <div class="name">{{party_name}}<span v-show="in_battle(party_no)" class="status">[战斗中]</span>
+            <span v-show="status==2" class="status">[遠征中]</span><span v-show="status==2" class="status">[{{finished_at | conquest_time}}]</span>
+            <span v-show="status==2" class="status">[工程預定位置]</span>
+          </div>
           <!-- 等级和兵力标注-->
           <div class="amounts">
-            <span class="alv">  [Average Lv.<b>{{avearge_lv}}] </b></span><span class="lva">[Total Lv.<b>{{amount_lv}}]</b>
+            <span class="alv">  Average Lv.<b>{{avearge_lv}} </b></span>
+            <span class="lva">Total Lv.<b>{{amount_lv}}</b>
             </span>
           </div>
           <!-- 列表-->
@@ -52,7 +60,9 @@
                 </div>
                 <div class="c">
                   <div class="shp">HP 0 / 0</div>
-                  <div class="sf"><span class="sfico"></span>0</div>
+                  <div class="sf">
+                    <span class="sfico"></span>0
+                  </div>
                 </div>
                 <div class="c2">
                   <div class="sequ"><span>[空]</span></div>
@@ -68,7 +78,11 @@
                   <div class="sf"><span v-class="r: fatigue &lt; 6,y: fatigue &gt;= 6 &amp;&amp; fatigue &lt; 20,p: fatigue &gt;= 50" class="sfico"></span><span v-show="fatigue &gt;= 50">桜吹雪</span><span v-show="fatigue &lt; 50 &amp;&amp; fatigue &gt;= 20">通常</span><span v-show="fatigue &lt; 20">疲労</span><span>{{fatigue}}</span><span v-show="fatigue &gt;= 50">(+20%)</span><span v-show="fatigue &gt;= 6 &amp;&amp; fatigue &lt; 20">(-20%)</span><span v-show="fatigue &lt; 6">(-40%)</span></div>
                 </div>
                 <div class="c2">
-                  <div class="sequ"><span v-if="equip_serial_id1!=null" v-class="r: equip_1['level'] == 2, ur: equip_1['level'] == 0, b: equip_1['soldier_now'] == 0">[{{equip_1['sname']}} {{equip_1['soldier_now']}}/{{equip_1['soldier_max']}}]</span><span v-if="equip_serial_id1==null&amp;&amp;max_equip&gt;=1">[空]</span><span v-if="equip_serial_id2!=null" v-class="r: equip_2['level'] == 2, ur: equip_2['level'] == 0, b: equip_2['soldier_now'] == 0">[{{equip_2['sname']}} {{equip_2['soldier_now']}}/{{equip_2['soldier_max']}}]</span><span v-if="equip_serial_id2==null&amp;&amp;max_equip&gt;=2">[空]</span><span v-if="equip_serial_id3!=null" v-class="r: equip_3['level'] == 2, ur: equip_3['level'] == 0, b: equip_3['soldier_now'] == 0">[{{equip_3['sname']}} {{equip_3['soldier_now']}}/{{equip_3['soldier_max']}}]</span><span v-if="equip_serial_id3==null&amp;&amp;max_equip&gt;=3">[空]</span></div>
+                  <div class="sequ"><span v-if="equip_serial_id1!=null" v-class="r: equip_1['level'] == 2, ur: equip_1['level'] == 0, b: equip_1['soldier_now'] == 0">[{{equip_1['sname']}} {{equip_1['soldier_now']}}/{{equip_1['soldier_max']}}]</span><span v-if="equip_serial_id1==null&amp;&amp;max_equip&gt;=1">[空]</span>
+                    <span v-if="equip_serial_id2!=null" v-class="r: equip_2['level'] == 2, ur: equip_2['level'] == 0, b: equip_2['soldier_now'] == 0">[{{equip_2['sname']}} {{equip_2['soldier_now']}}/{{equip_2['soldier_max']}}]</span>
+                    <span v-if="equip_serial_id2==null&amp;&amp;max_equip&gt;=2">[空]</span>
+                    <span v-if="equip_serial_id3!=null" v-class="r: equip_3['level'] == 2, ur: equip_3['level'] == 0, b: equip_3['soldier_now'] == 0">[{{equip_3['sname']}} {{equip_3['soldier_now']}}/{{equip_3['soldier_max']}}]</span>
+                    <span v-if="equip_serial_id3==null&amp;&amp;max_equip&gt;=3">[空]</span></div>
                 </div>
               </div>
             </li>
@@ -77,14 +91,37 @@
         </div>
       </div>
     </div>
+    <!-- 分頁 #3：本丸 -->
     <div v-if="tab==3" class="forge-rep">
       <div class="panel fr">
-        <div class="t">刀裝・馬</div>
+        <div class="t">本丸資產</div>
+        <li>木炭：<b v-if="view.resource.charcoal!=null">{{Math.floor(view.resource.charcoal)}}</b></li>
+        <li>玉鋼：<b v-if="view.resource.steel!=null">{{Math.floor(view.resource.steel)}}</b></li>
+        <li>冷却材：<b v-if="view.resource.coolant!=null">{{Math.floor(view.resource.coolant)}}</b></li>
+        <li>砥石：<b v-if="view.resource.file!=null">{{Math.floor(view.resource.file)}}</b></li>
+        <li>依頼札：<b v-if="view.resource.bill!=null">{{Math.floor(view.resource.bill)}}</b></li>
+        <li>手伝い札：<b v-if="view.resource.bonemeal!=null">{{Math.floor(view.resource.bonemeal)}}</b></li>
+        <li>小判：<b v-if="view.resource.money!=null">{{Math.floor(view.resource.money)}}</b></li>
+        手伝い札、小判数量僅於登入遊戲時可取得資訊，所以數值不會變化
+      </div>
+      <div class="panel fr">
+        <div class="t">刀裝‧馬</div>
+        <!-- 無法單純顯示未裝備刀裝 僅可顯示所有資源 -->
         <div v-show="!view['equips']['set']" class="amounts">暫未取得資料，請進入結成頁面</div>
-        <ul v-if="view['equips']['set']" class="equ">
+        <ul v-if="view['equips']['set']" class="equ" and class="5equ">
           <li v-repeat="view['equips']['data']">[{{$key | e2n}}] 持有 {{$value}}</li>
         </ul>
       </div>
+      <!--
+      <div class="panel fr">
+        <div class="t">馬</div>
+         
+        <div v-show="!view['equips']['set']" class="amounts">暫未取得資料，請進入結成頁面</div>
+        <ul v-if="view['equips']['set']" class="equ" >
+          <li v-repeat="view['equips']['data']">[{{$key | e2n}}] 持有 {{$value}}</li>
+        </ul>
+      </div>
+       -->
       <div class="panel fr">
         <div class="t">锻刀<span style="cursor: pointer;" v-on="click: toggleForge" class="alv">[點擊查看或關閉劇透]</span></div>
         <div class="amounts"><span class="alv">工坊<b>{{data['forge']['open']}}</b></span><span class="lva">使用中<b>{{checkout('forge')}}</b></span></div>
@@ -100,10 +137,25 @@
         </ul>
       </div>
     </div>
+    <!-- 分頁 #4：發展 -->
+    <div v-if="tab==4" class="forge-rep">
+      <div class="panel fr">
+        <div class="t">未手入刀劍清單</div>
+        <li>木炭：<b v-if="view.resource.charcoal!=null">{{Math.floor(view.resource.charcoal)}}</b></li>
+        <li>小判：<b v-if="view.resource.money!=null">{{Math.floor(view.resource.money)}}</b></li>
+      </div>
+      <div class="panel fr">
+        <div class="t">數值未滿刀劍清單</div>
+        <li>木炭：<b v-if="view.resource.charcoal!=null">{{Math.floor(view.resource.charcoal)}}</b></li>
+        <li>小判：<b v-if="view.resource.money!=null">{{Math.floor(view.resource.money)}}</b></li>
+      </div>
+    </div>
+
+    <!-- 分頁 #5 ：紀錄 -->
     <div v-if="tab==5" class="logs">
       <div class="panel">
-        <div class="innerad"><a href="http://weibo.com/moelynn" target="_blank">快更新了盯紧微博哦！</a></div>
-        <div style="cursor: pointer;" v-on="click: saveLogs()" class="t">另存原始數據(CSV文件)</div>
+
+        <div style="cursor: pointer;" v-on="click: saveLogs()" class="t">←點擊另存原始數據(CSV文件)</div>
       </div>
       <div class="panel">
         <div class="t">鍛刀紀錄</div>
@@ -134,7 +186,7 @@
         </table>
       </div>
       <div class="panel">
-        <div class="t">剪刀紀錄</div>
+        <div class="t">撿刀紀錄</div>
         <table>
           <thead>
             <tr>
@@ -160,69 +212,87 @@
         </table>
       </div>
     </div>
-    <!-- 设置-->
+    <!-- 分頁 #-1：設定 功能-->
     <div v-show="tab==-1">
       <div class="panel-config">
-        <div class="t">數據</div>
+        <div class="t">功能</div>
         <ul class="sl">
           <li>
-            <div class="act">開啟疲勞試算<span v-class="on: config.cad == 0" v-on="click: applyConfig('cad', 0)">OFF</span><span v-class="on: config.cad == 1" v-on="click: applyConfig('cad', 1)">ON</span></div>
+            <div class="act">疲勞估算功能<span v-class="on: config.cad == 0" v-on="click: applyConfig('cad', 0)">OFF</span><span v-class="on: config.cad == 1" v-on="click: applyConfig('cad', 1)">ON</span></div>
+            <div class="desc">[建議開啟]</div>
             <div class="desc">因为从游戏数据中只能拿到【休息和战斗时就算刷新游戏也没有变化的】疲劳数据。开启该功能后会根据toulove上的说明进行模拟演算。</div>
             <div class="desc">恢复时间为每三分钟恢复三点。</div>
             <div class="desc">但是你要是不开启这个功能的话就算你退游戏一晚上起来虽然体力值都应该恢复到49了但是数据上还是会维持疲劳状态。</div>
             <div class="desc">目前尚未发现获得完全准确数据的方法。</div>
           </li>
           <li>
+            <div class="desc">...</div>
             <div class="act">在结成界面显示真实疲劳数据<span v-class="on: config.cadOffList == 0" v-on="click: applyConfig('cadOffList', 0)">OFF</span><span v-class="on: config.cadOffList == 1" v-on="click: applyConfig('cadOffList', 1)">ON</span></div>
-            <div class="desc">其实没什么用，不建议开启。因为这种纯净的数据反而不能反应真实情况。</div>
+            <div class="desc">[不建議開啟]</div>
             <div class="desc">这个选项被留下的目的是为了方便调试。</div>
           </li>
+        </ul>
+      </div>
+
+    </div>
+    <!-- 分頁 #-1：設定 資料-->
+    <div v-show="tab==-1">
+      <div class="panel-config">
+        <div class="t">資料</div>
+        <ul class="sl">
           <li>
-            <div class="act">储存游戏数据<span v-class="on: config.dataCache == 0" v-on="click: applyConfig('dataCache', 0)">OFF</span><span v-class="on: config.dataCache == 1" v-on="click: applyConfig('dataCache', 1)">ON</span></div>
-            <div class="desc">
-              将游戏数据储存在本地，如果在战斗中误关插件的话这个功能会很有用 另外可以存储锻刀和拾取数据
-            </div>
+            <div class="act">本機資料暫存<span v-class="on: config.dataCache == 0" v-on="click: applyConfig('dataCache', 0)">OFF</span><span v-class="on: config.dataCache == 1" v-on="click: applyConfig('dataCache', 1)">ON</span></div>
+            <div class="desc">[建議開啟]</div>
+            <div class="desc">將遊戲資料暫存於本機。開啟後：戰鬥中不小心關閉套件，可重新開啟套件並解析戰鬥數據；</div>
+            <div class="desc">注：需開啟本功能，紀錄分頁中的鍛刀紀錄與撿刀紀錄，才能將歷史紀錄存下來。</div>
             <div v-show="dataExist" v-on="click: applyConfig('dataCache', -1)" style="cursor: pointer;" class="desc">
               < ** 清除過去紀錄 **>
             </div>
           </li>
         </ul>
       </div>
+    </div>
+    <!-- 分頁 #-1：設定 彈出視窗-->
+    <div v-show="tab==-1">
       <div class="panel-config">
-        <div class="t">提醒</div>
+        <div class="t">彈出視窗</div>
         <ul class="sl">
           <li>
             <div class="act">遠征時間提醒<span v-class="on: config.notify_conquest == 0" v-on="click: applyConfig('notify_conquest', 0)">關閉</span><span v-class="on: config.notify_conquest == 1" v-on="click: applyConfig('notify_conquest', 1)">五分鐘前</span><span v-class="on: config.notify_conquest == 2" v-on="click: applyConfig('notify_conquest', 2)">兩分鐘前</span><span v-class="on: config.notify_conquest == 3" v-on="click: applyConfig('notify_conquest', 3)">半分鐘前</span><span v-class="on: config.notify_conquest == 4" v-on="click: applyConfig('notify_conquest', 4)">結束時</span></div>
             <div class="desc">遠征結束提醒。</div>
           </li>
           <li>
+            <div class="desc">...</div>
             <div class="act">手入時間提醒<span v-class="on: config.notify_repair == 0" v-on="click: applyConfig('notify_repair', 0)">關閉</span><span v-class="on: config.notify_repair == 1" v-on="click: applyConfig('notify_repair', 1)">五分鐘前</span><span v-class="on: config.notify_repair == 2" v-on="click: applyConfig('notify_repair', 2)">兩分鐘前</span><span v-class="on: config.notify_repair == 3" v-on="click: applyConfig('notify_repair', 3)">半分鐘前</span><span v-class="on: config.notify_repair == 4" v-on="click: applyConfig('notify_repair', 4)">結束時</span></div>
             <div class="desc">
               手入結束提醒。 * [待解决]使用手伝い札時，提醒不會消失。
             </div>
           </li>
           <li>
+            <div class="desc">...</div>
             <div class="act">戰鬥損失提醒<span v-class="on: config.notify_broken == 0" v-on="click: applyConfig('notify_broken', 0)">關閉</span><span v-class="on: config.notify_broken == 1" v-on="click: applyConfig('notify_broken', 1)">重傷</span><span v-class="on: config.notify_broken == 2" v-on="click: applyConfig('notify_broken', 2)">中傷</span><span v-class="on: config.notify_broken == 3" v-on="click: applyConfig('notify_broken', 3)">輕傷</span><span v-class="on: config.notify_broken == 4" v-on="click: applyConfig('notify_broken', 4)">掉血</span><span v-class="on: config.notify_broken == 5" v-on="click: applyConfig('notify_broken', 5)">刀裝</span></div>
             <div class="desc">戰鬥損失提醒。</div>
             <div class="desc">提醒级别向下包含：选择刀装，則掉血、轻伤等状态都会弹出提醒。</div>
           </li>
           <li>
+            <div class="desc">...</div>
             <div class="act">戰鬥掉落提醒<span v-class="on: config.notify_getnew == 0" v-on="click: applyConfig('notify_getnew', 0)">關閉</span><span v-class="on: config.notify_getnew == 1" v-on="click: applyConfig('notify_getnew', 1)">只提醒亚欧刀</span><span v-class="on: config.notify_getnew == 2" v-on="click: applyConfig('notify_getnew', 2)">只提醒欧洲刀</span><span v-class="on: config.notify_getnew == 3" v-on="click: applyConfig('notify_getnew', 3)">全部</span></div>
             <div class="desc">战斗掉落提醒。</div>
             <div class="desc">亚洲刀包括枪、岩融、大太刀和四花太以及欧洲刀。</div>
             <div class="desc">欧洲刀包括两把欧短、狐球和爷爷。</div>
+            <div class="desc">(歐刀判斷待更新)</div>
           </li>
         </ul>
       </div>
     </div>
-    <!-- 设置-->
+    <!-- 分頁 #-1：關於套件 -->
     <div v-show="tab==-2">
       <div class="panel-about">
         <div class="t">審神忙 · Tohken Ranbu Helper</div>
         <ul class="sl">
           <li>
-            <div class="desc">目前版本： V0.3.0.11 (Beta)</div>
-            <div class="desc">更新時間： 2017年10月29日</div>
+            <div class="desc">目前版本： V0.3.0.1111 (Beta)</div>
+            <div class="desc">更新時間： 2017年12月21日</div>
             <div class="desc">原作者项目仓库：<a href="https://github.com/hitomi/tohken">https://github.com/hitomi/tohken</a></div>
             <div class="desc">本次更新：<a href="https://github.com/ch890333/tohken">https://github.com/ch890333/tohken</a></div>
           </li>
@@ -233,47 +303,41 @@
         <ul class="sl">
           <li>
             <div class="act">攻城狮</div>
-            <div class="desc">求助攻！求一起战斗！</div>
-            <div class="desc">原作者：<a href="http://weibo.com/moelynn" target="_blank">@毫无存在感的凌</a></div>
+            <div class="desc">原作者：<a href="http://weibo.com/moelynn" target="_blank">@凌</a></div>
             <div class="desc">本次更新人員：<a href="https://www.plurk.com/CymbieWolf" target="_blank">@技術系阿審</a></div>
           </li>
-          <li>
-            <div class="act">攻略组</div>
-            <div class="desc">各位测试组成员天天帮忙踩坑跑图拿数据和抓虫OwO，超辛苦的！万分感谢！！没有你们就没法这么快的把新版本坑出来！</div>
-            <div class="desc"><a href="http://weibo.com/NKSan" target="_blank">@1tuka</a></div>
-            <div class="desc"><a href="http://weibo.com/u/2206048461" target="_blank">@生亦求喂食</a></div>
-            <div class="desc"><a href="http://weibo.com/sr34v5" target="_blank">@Rabbit_仙鹤归家w</a></div>
-            <div class="desc"><a href="http://weibo.com/moyuchaoren" target="_blank">@茈予-安详地舔舔舔</a></div>
-            <div class="desc"><a href="http://weibo.com/koei327" target="_blank">@常暗_PETY亚洲善待山姥切国広组</a></div>
-          </li>
-          <li>
-            <div class="act">感谢</div>
-            <div class="desc">赞助商</div>
-            <div class="desc"><a href="http://weibo.com/erhuomiao" target="_blank">喵的二货小店</a></div>
-            <div class="desc">刀纹和资料</div>
-            <div class="desc"><a href="http://wikiwiki.jp/toulove" target="_blank">Toulove</a></div>
-            <div class="desc">帮咱解读了不少百科上的内容（咱日语废）</div>
-            <div class="desc"><a href="http://weibo.com/huihuiowo" target="_blank">@幸好我长的帅</a></div>
-            <div class="desc">前期测试协助，另外戳过去能看到会动可以戳还会说话的Live2D动态壁纸哦！</div>
-            <div class="desc"><a href="http://weibo.com/546246695" target="_blank">@高庄主-蹲等魔界战记5</a></div>
-          </li>
+
         </ul>
       </div>
       <div class="panel-about">
         <div class="t">目前已知BUG</div>
         <ul class="sl">
           <li>
-            <div class="act">手入时使用手伝い札时提醒不会消失</div>
-            <div class="act">小判数量不会变化</div>
+            <div class="act">使用手伝い札，依然會跳出手入完畢提醒</div>
             <div class="act">界面特别窄时字会堆在一起</div>
-            <div class="act">審神者名稱無法取得 (2017.10.12)</div>
+            <div class="act">(阿官規格)手伝い札、小判数量僅於登入遊戲時可取得資訊，所以數值不會變化</div>
+            <div class="act">(阿官規格)審神者名稱僅於登入遊戲時可取得，若沒有開啟本地暫存，或是先啟動套件再進本丸，會無法顯示審神者的名稱</div>
           </li>
         </ul>
       </div>
       <div class="panel-about">
         <div class="t">更新公告</div>
         <ul class="sl">
-           <li>
+          <li>
+            <div class="act">v0.3.0.1111 </div>
+            <div class="desc">對應https進行解讀修正</div>
+            <div class="desc">新增：活動刀#150資訊</div>
+            <div class="desc">新增：極打資訊、傳聞中的極化經驗值資訊</div>
+            <div class="desc">UI微調：將資材數量從套件header移至[本丸]分頁顯示，避免字體擠成一團</div>
+            <div class="desc">其他UI微調：</div>
+            <div class="desc">致其他拆包研究的攻城師：已補齊刀帳中推測資料欄位，程式結構化緩慢的進行中</div>
+          </li>
+          <li>
+            <div class="act">v0.3.0.111 </div>
+            <div class="desc">修彈出視窗的錯字</div>
+          </li>
+
+          <li>
             <div class="act">v0.3.0.11 2017/10/29</div>
             <div class="desc">預先新增三花極打資料</div>
           </li>
@@ -283,20 +347,24 @@
             <div class="desc">刀種更新至 大般若長光</div>
             <div class="desc">致其他拆包研究的攻城師：已將程式碼排版為易於閱讀的狀況</div>
           </li>
+
           <li>
             <div class="act">v0.3.0.</div>
             <div class="desc">Uchigatana Kiwame now have their experience points properly displayed.</div>
           </li>
+
           <li>
             <div class="act">v0.2.9.1 2017/10/12</div>
             <div class="desc">翻譯並補齊靜態參考資料</div>
             <div class="desc">新增極打資料型態(尚未確認、待補齊)</div>
           </li>
+
           <li>
             <div class="act">v0.2.9 2017/09/15</div>
             <div class="desc">Wakizashi Kiwame now have their experience points properly displayed (level 55).</div>
             <div class="desc">Update for Uchigatana Kiwame will be implemented once exp values have been determined.</div>
           </li>
+
           <li>
             <div class="act">v0.2.0 150315</div>
             <div class="desc">* 远征提醒修复</div>
@@ -305,31 +373,19 @@
             <div class="desc">+ 刀装汇总</div>
             <div class="desc">+ 锻刀和掉落统计</div>
           </li>
-          <li>
-            <div class="act">v0.1.3 150304</div>
-            <div class="desc">* 更完善的修复了提醒失效问题(感谢微博<a href="http://weibo.com/moyuchaoren" target="_blank">@茈予-安详地舔舔舔</a>提供的错误报告截图，感谢<a href="http://weibo.com/koei327" target="_blank">@常暗_PETY亚洲善待山姥切国広组</a>进行测试汇报)</div>
-            <div class="desc">追加平均等级和等级总和的显示功能，等级总和在鼠标悬停在平均等级上时会出现(微博<a href="http://weibo.com/NKSan" target="_blank">@1tuka</a>)</div>
-          </li>
-          <li>
-            <div class="act">v0.1.2 150304</div>
-            <div class="desc">紧急修复提醒失效问题(微博<a href="http://weibo.com/moyuchaoren" target="_blank">@茈予-安详地舔舔舔</a>)</div>
-          </li>
-          <li>
-            <div class="act">v0.1.1 150304</div>
-            <div class="desc">修正了99级时的显示问题(来自贴吧@catofsickle)</div>
-            <div class="desc">追加设置页面，可以开启和关闭部分提醒功能</div>
-            <div class="desc">增加战斗过程中的爆刀剧透功能，请在设置页面中手工开启(微博<a href="http://weibo.com/60046002" target="_blank">@天見禎芽-目指立派前野厨</a>)</div>
-          </li>
+
         </ul>
       </div>
     </div>
   </div>
+  <!-- 第三方資源 -->
   <script src="../../thirdparty/FileSaver.js"></script>
   <script src="../../thirdparty/lodash.js"></script>
   <script src="../../thirdparty/jquery.js"></script>
   <script src="../../thirdparty/vue.js"></script>
   <script src="../../thirdparty/aes.js"></script>
   <script src="../../thirdparty/pad-nopadding-min.js"></script>
+  <!-- 套件程式載入 -->
   <script src="./app/define.js"></script>
   <script src="./app/data.js"></script>
   <script src="./app/config.js"></script>
@@ -339,6 +395,9 @@
   <script src="./app/router.js"></script>
   <script src="./app/view.js"></script>
   <script src="./app/app.js"></script>
+  <!-- 工程中
+  <script src="./app/timer.js"></script>
+-->
 </body>
 
 </html>
