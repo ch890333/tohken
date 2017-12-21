@@ -1,8 +1,8 @@
 # Tohken Ranbu Helper
 ## 介绍
 * Chrome插件一枚，跟著阿官更新版本。
+* 目前版本 0.3.0.1111 移除不必要程式
 * 目前已支援日向正宗的刀劍資料更新。
-* 0.3.0.1111 移除不必要程式
 
 ## 功能
 * 疲劳度查看以及疲劳演算
@@ -43,11 +43,8 @@ src─┐
     │      │      store.js            # 储存部分的封装
     │      │      view.js             # 默认的视图数据
     │      │
-    │      ├─assets
-    │             base.less
-    │             index.less
-    │             main.less
-    │             party-item.less
+    │      └──assets
+    │             main.css
     │             # 样式
     └─thirdparty
             aes.js
