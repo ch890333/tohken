@@ -1,7 +1,7 @@
 {
   "name": "Touken Ranbu Helper(Beta)",
   "manifest_version": 2,
-  "version": "0.3.0.11",
+  "version": "0.3.0.11111",
   "devtools_page": "devtools/devtools.html",
   "content_security_policy": "default-src 'self'  chrome-extension-resource: ; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval';  connect-src *; frame-src *;",
   "web_accessible_resources":
