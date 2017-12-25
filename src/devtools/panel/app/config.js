@@ -12,6 +12,7 @@
     "notify_broken": 0,
     "notify_getnew": 0,
     "notify_fatigue": 0,
-    "notify_frecover": 0
+    "notify_frecover": 0,
+    "language": 0,
   };
 })(window);
