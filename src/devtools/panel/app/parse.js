@@ -5,6 +5,7 @@
   if (!exports.tohken.parse) {
     exports.tohken.parse = {};
   }
+  //data:資源
   exports.tohken.parse.resource = function(resource) {
     if (!this.data['resource']['filling']) {
       this.data['resource']['filling'] = true;
@@ -22,6 +23,8 @@
     this.data['resource']['vfile'] = 0;
     return 'done';
   };
+  //data:資源
+  //data:刀劍狀態、經驗值
   exports.tohken.parse.sword = function(sword) {
     var branch;
     if (!this.data['sword']['filling']) {
@@ -40,40 +43,38 @@
             pre[ki] = 0;
           }
           if (ki === 'next_exp') {
-            console.log(v['sword_id']);
-            var swrodIdSymbol = exports.tohken.define.tohkens[v['sword_id']]['symbol'];
-            var expToNextLevel = parseInt(pre['level'], 10);
-            var nowExp = parseInt(pre['exp'], 10);
-            switch (swrodIdSymbol) {
+            //console.log(v['sword_id']);
+            //var swrodIdSymbol = exports.tohken.define.tohkens[v['sword_id']]['symbol'];
+            //var expToNextLevel = parseInt(pre['level'], 10);
+            //var nowExp = parseInt(pre['exp'], 10);
+            switch (exports.tohken.define.tohkens[v['sword_id']]['symbol']) {
               case 1:
-                pre[ki] = exports.tohken.define.upexp[expToNextLevel] - nowExp;
+                pre[ki] = exports.tohken.define.upexp[parseInt(pre['level'], 10)] - parseInt(pre['exp'], 10);
                 break;
               case 2:
-                pre[ki] = exports.tohken.define.upexp2[expToNextLevel] - nowExp;
+                pre[ki] = exports.tohken.define.upexp2[parseInt(pre['level'], 10)] - parseInt(pre['exp'], 10);
                 break;
               case 3:
-                pre[ki] = exports.tohken.define.upexp3[expToNextLevel] - nowExp;
+                pre[ki] = exports.tohken.define.upexp3[parseInt(pre['level'], 10)] - parseInt(pre['exp'], 10);
                 break;
               case 4:
-                pre[ki] = exports.tohken.define.upexp4[expToNextLevel] - nowExp;
+                pre[ki] = exports.tohken.define.upexp4[parseInt(pre['level'], 10)] - parseInt(pre['exp'], 10);
                 break;
               case 5:
-                pre[ki] = exports.tohken.define.upexp5[expToNextLevel] - nowExp;
+                pre[ki] = exports.tohken.define.upexp5[parseInt(pre['level'], 10)] - parseInt(pre['exp'], 10);
                 break;
               case 6:
-                pre[ki] = exports.tohken.define.upexp6[expToNextLevel] - nowExp;
+                pre[ki] = exports.tohken.define.upexp6[parseInt(pre['level'], 10)] - parseInt(pre['exp'], 10);
                 break;
               case 7:
-                pre[ki] = exports.tohken.define.upexp7[expToNextLevel] - nowExp;
+                pre[ki] = exports.tohken.define.upexp7[parseInt(pre['level'], 10)] - parseInt(pre['exp'], 10);
                 break;
               case 8:
-                pre[ki] = exports.tohken.define.upexp8[expToNextLevel] - nowExp;
+                pre[ki] = exports.tohken.define.upexp8[parseInt(pre['level'], 10)] - parseInt(pre['exp'], 10);
                 break;
               case 9:
-                pre[ki] = exports.tohken.define.upexp9[expToNextLevel] - nowExp;
+                pre[ki] = exports.tohken.define.upexp9[parseInt(pre['level'], 10)] - parseInt(pre['exp'], 10);
                 break;
-                //default:
-                //break;
             }
             if (parseInt(v['level'], 10) === 99) {
               return pre[ki] = 0;
@@ -89,6 +90,8 @@
     exports.tohken.parse.view.call(this, 'party');
     return 'done';
   };
+  //data:刀劍狀態、經驗值
+  //data:隊伍名單
   exports.tohken.parse.party = function(party) {
     if (!this.data['party']['filling']) {
       this.data['party']['filling'] = true;
@@ -98,6 +101,8 @@
     exports.tohken.parse.view.call(this, 'party');
     return 'done';
   };
+  //data:隊伍名單
+  //data:清點裝備
   exports.tohken.parse.equip = function(equip) {
     if (!this.data['equip']['filling']) {
       this.data['equip']['filling'] = true;
@@ -108,6 +113,8 @@
     exports.tohken.parse.view.call(this, 'equip');
     return 'done';
   };
+  //data:清點裝備
+  //data:鍛刀資訊
   exports.tohken.parse.forge = function(forge) {
     if (!this.data['forge']['filling']) {
       this.data['forge']['filling'] = true;
@@ -140,6 +147,8 @@
     console.log(JSON.stringify(this.data['logs']['forge']));
     return 'done';
   };
+  //data:鍛刀資訊
+  //data:手入資訊
   exports.tohken.parse.repair = function(repair) {
     if (!this.data['repair']['filling']) {
       this.data['repair']['filling'] = true;
@@ -148,6 +157,8 @@
     this.data['repair']['last_update'] = Date.now();
     return 'done';
   };
+  //data:手入資訊
+  //運算:戰鬥血量變化、經驗值變化 (損血提醒、撿刀提醒)
   exports.tohken.parse.battle = function(battle) {
     var asia, europe, leader, notify, party, player, preupload, result, target;
     party = {};
@@ -414,41 +425,39 @@
         sword['equip_serial_id1'] = party[v['serial_id']]['equip_serial_id1'];
         sword['equip_serial_id2'] = party[v['serial_id']]['equip_serial_id2'];
         sword['equip_serial_id3'] = party[v['serial_id']]['equip_serial_id3'];
-
-        var swrodIdSymbol = exports.tohken.define.tohkens[v['sword_id']]['symbol'];
-        var expToNextLevel = parseInt(pre['level'], 10);
-        var nowExp = parseInt(pre['exp'], 10);
-        
-        switch (swrodIdSymbol) {
+        //var swrodIdSymbol = exports.tohken.define.tohkens[party[v['serial_id']]['sword_id']]['symbol'];
+        //var expToNextLevel = parseInt(sword['level'], 10);
+        var nowExp = parseInt(sword['exp'], 10);
+        switch (exports.tohken.define.tohkens[party[v['serial_id']]['sword_id']]['symbol']) {
           case 1:
-            sword['next_exp'] = exports.tohken.define.upexp[expToNextLevel] - nowExp;
+            sword['next_exp'] = exports.tohken.define.upexp[parseInt(sword['level'], 10)] - nowExp;
             break;
           case 2:
-            sword['next_exp'] = exports.tohken.define.upexp2[expToNextLevel] - nowExp;
+            sword['next_exp'] = exports.tohken.define.upexp2[parseInt(sword['level'], 10)] - nowExp;
             break;
           case 3:
-            sword['next_exp'] = exports.tohken.define.upexp3[expToNextLevel] - nowExp;
+            sword['next_exp'] = exports.tohken.define.upexp3[parseInt(sword['level'], 10)] - nowExp;
             break;
           case 4:
-            sword['next_exp'] = exports.tohken.define.upexp4[expToNextLevel] - nowExp;
+            sword['next_exp'] = exports.tohken.define.upexp4[parseInt(sword['level'], 10)] - nowExp;
             break;
           case 5:
-            sword['next_exp'] = exports.tohken.define.upexp5[expToNextLevel] - nowExp;
+            sword['next_exp'] = exports.tohken.define.upexp5[parseInt(sword['level'], 10)] - nowExp;
             break;
           case 6:
-            sword['next_exp'] = exports.tohken.define.upexp6[expToNextLevel] - nowExp;
+            sword['next_exp'] = exports.tohken.define.upexp6[parseInt(sword['level'], 10)] - nowExp;
             break;
           case 7:
-            sword['next_exp'] = exports.tohken.define.upexp7[expToNextLevel] - nowExp;
+            sword['next_exp'] = exports.tohken.define.upexp7[parseInt(sword['level'], 10)] - nowExp;
             break;
           case 8:
-            sword['next_exp'] = exports.tohken.define.upexp8[expToNextLevel] - nowExp;
+            sword['next_exp'] = exports.tohken.define.upexp8[parseInt(sword['level'], 10)] - nowExp;
             break;
           case 9:
-            sword['next_exp'] = exports.tohken.define.upexp9[expToNextLevel] - nowExp;
+            sword['next_exp'] = exports.tohken.define.upexp9[parseInt(sword['level'], 10)] - nowExp;
             break;
-            //default:      
-        }
+        } //switch
+
         if (parseInt(sword['level'], 10) === 99) {
           sword['next_exp'] = 0;
         }
@@ -503,6 +512,8 @@
     exports.tohken.parse.uploadmap.call(this, preupload);
     return 'done';
   };
+  //運算:戰鬥血量變化、經驗值變化 (損血提醒、撿刀提醒)
+  //網頁:資料顯示
   exports.tohken.parse.view = function(type) {
     var equ, source, target;
     switch (type) {
@@ -548,10 +559,11 @@
         target = _.clone(this.data['party']['data']);
         _.forEach(target, (function(_this) {
           return function(v, k) {
-            var eqs, lvs, slot, ths;
+            var eqs, lvs, slot, ths, ftgs;
             lvs = 0;
             eqs = 0;
             ths = 0;
+            ftgs = 0;
             slot = _.clone(v['slot']);
             _.forEach(v['slot'], function(vi, ki) {
               var soldiers;
@@ -604,6 +616,7 @@
                 slot[ki]['soldiers'] = soldiers;
                 lvs += parseInt(slot[ki]['level'], 10);
                 eqs += soldiers;
+                ftgs += parseInt(slot[ki]['fatigue'], 10);
                 if (_this.config["cad"]) {
                   return slot[ki]['fatigue'] = parseInt(slot[ki]['fatigue'], 10) + parseInt(slot[ki]['vfatigue'], 10);
                 } else {
@@ -613,7 +626,9 @@
             });
             target[k]['slot'] = slot;
             target[k]['amount_lv'] = lvs;
-            target[k]['avearge_lv'] = lvs ? (lvs / ths).toFixed(2) : 0;
+            target[k]['average_lv'] = lvs ? (lvs / ths).toFixed(2) : 0;
+            target[k]['amount_fatigue'] = ftgs;
+            target[k]['average_fatigue'] = ftgs ? (ftgs / ths).toFixed(2) : 0;
             target[k]['soldiers'] = eqs;
             return 'done';
           };
@@ -623,6 +638,8 @@
     }
     return 'done';
   };
+  //網頁:資料顯示
+  //彈窗:遠征提醒
   exports.tohken.parse.conquest = function(party) {
     if (this.config['notify_conquest'] === 0) {
       return;
@@ -647,16 +664,17 @@
               title = "部隊" + v['party_no'] + " 遠征還有五分鐘結束";
               cmsg = "將在結束前五分鐘提醒";
               earlier = 5 * 60 * 1000;
-              break;
+              //break;
             case 2:
               title = "部隊" + v['party_no'] + " 遠征還有二分鐘結束";
               cmsg = "將在結束前二分鐘提醒";
               earlier = 2 * 60 * 1000;
-              break;
+              //break;
             case 3:
               title = "部隊" + v['party_no'] + " 遠征還有半分鐘結束";
               cmsg = "將在結束前半分鐘提醒";
               earlier = 0.5 * 60 * 1000;
+              return;
           }
           _this.sendMessage({
             'type': 'alarm',
@@ -679,6 +697,8 @@
     })(this));
     return 'done';
   };
+  //彈窗:遠征提醒
+  //彈窗:手入提醒
   exports.tohken.parse.check_repair = function(repair) {
     if (this.config['notify_repair'] === 0) {
       return;
@@ -736,6 +756,7 @@
     })(this));
     return 'done';
   };
+  //彈窗:手入提醒
   exports.tohken.parse.upload = function(id, data) {
     $.post("http://api.toulove.org", JSON.stringify({
       "sword": data['sword_id'],

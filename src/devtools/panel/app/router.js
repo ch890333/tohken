@@ -108,6 +108,20 @@
             return parse.party.call(_this, data);
           };
         })(this));
+/*
+      case 'party/setequip':
+        return this.parser(request, (function(_this) {
+          return function(data) {
+            return parse.party.call(_this, data);
+          };
+        })(this));
+      case 'party/removeequip':
+        return this.parser(request, (function(_this) {
+          return function(data) {
+            return parse.party.call(_this, data);
+          };
+        })(this));
+*/
       case 'login/start':
         return this.parser(request, (function(_this) {
           return function(data) {

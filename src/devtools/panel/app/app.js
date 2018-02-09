@@ -120,12 +120,10 @@
           con = JSON.parse(content);
           con['post_data'] = post;
           if (_.has(con, 'data') && _.has(con, 'iv')) {
-            var e = CryptoJS.enc.Utf8.stringify(CryptoJS.AES.decrypt(
-              {
+            var e = CryptoJS.enc.Utf8.stringify(CryptoJS.AES.decrypt({
                 ciphertext: CryptoJS.enc.Hex.parse(con.data)
               },
-              CryptoJS.enc.Utf8.parse("9ij8pNKv7qVJnpj4"),
-              {
+              CryptoJS.enc.Utf8.parse("9ij8pNKv7qVJnpj4"), {
                 iv: CryptoJS.enc.Hex.parse(con.iv),
                 mode: CryptoJS.mode.CBC,
                 padding: CryptoJS.pad.NoPadding
@@ -224,6 +222,12 @@
       },
       toggleForge: function() {
         return this.status['show_forge'] = !this.status['show_forge'];
+      },
+      clearLogsForge: function() {
+        this.data['logs']['forge'] = {};
+      },
+      clearLogsbattle: function() {
+        this.data['logs']['battle'] = {};
       },
       saveLogs: function() {
         var battle, blob, forge;
